@@ -80,7 +80,11 @@ jerry_port_log (jerry_log_level_t level, /**< message log level */
                 const char *format, /**< format string */
                 ...)  /**< parameters */
 {
+#ifndef MNTH
   if (level <= JERRY_PORT_DEFAULT_LOG_LEVEL)
+#else
+  (void)level;
+#endif
   {
     va_list args;
     va_start (args, format);
