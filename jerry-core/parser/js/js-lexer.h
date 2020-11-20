@@ -111,7 +111,7 @@ typedef enum
   LEXER_DIVIDE,                  /**< "/" (prec: 14) */
   LEXER_MODULO,                  /**< "%" (prec: 14) */
 
-  LEXER_LEFT_BRACE,              /**< "{" */
+  LEXER_LEFT_BRACE = 51,              /**< "{" */
   LEXER_LEFT_PAREN,              /**< "(" */
   LEXER_LEFT_SQUARE,             /**< "[" */
   LEXER_RIGHT_BRACE,             /**< "}" */
@@ -125,7 +125,7 @@ typedef enum
   LEXER_ARROW,                   /**< "=>" */
 #endif /* ENABLED (JERRY_ES2015_ARROW_FUNCTION) */
 
-  LEXER_KEYW_BREAK,              /**< break */
+  LEXER_KEYW_BREAK = 61,              /**< break */
   LEXER_KEYW_DO,                 /**< do */
   LEXER_KEYW_CASE,               /**< case  */
   LEXER_KEYW_ELSE,               /**< else */
@@ -147,7 +147,7 @@ typedef enum
   LEXER_KEYW_TRY,                /**< try */
 
   /* These are virtual tokens. */
-  LEXER_EXPRESSION_START,        /**< expression start */
+  LEXER_EXPRESSION_START = 81,        /**< expression start */
   LEXER_PROPERTY_GETTER,         /**< property getter function */
   LEXER_PROPERTY_SETTER,         /**< property setter function */
   LEXER_COMMA_SEP_LIST,          /**< comma separated bracketed expression list */
@@ -282,7 +282,7 @@ typedef struct
 {
   const uint8_t *char_p;                     /**< start of identifier or string token */
   prop_length_t length;                      /**< length or index of a literal */
-  uint8_t type;                              /**< type of the current literal */
+  lexer_literal_type_t type :8;                              /**< type of the current literal */
   uint8_t has_escape;                        /**< has escape sequences */
 } lexer_lit_location_t;
 
@@ -302,7 +302,7 @@ typedef struct
  */
 typedef struct
 {
-  uint8_t type;                              /**< token type */
+  lexer_token_type_t type : 8;                              /**< token type */
   uint8_t literal_is_reserved;               /**< future reserved keyword
                                               *   (when char_literal.type is LEXER_IDENT_LITERAL) */
   uint8_t extra_value;                       /**< helper value for different purposes */
@@ -319,7 +319,7 @@ typedef struct
 {
   lexer_literal_t *literal_p;                /**< pointer to the literal object */
   uint16_t index;                            /**< literal index */
-  uint8_t type;                              /**< literal object type */
+  lexer_literal_object_type_t type :8;                              /**< literal object type */
 } lexer_lit_object_t;
 
 /**

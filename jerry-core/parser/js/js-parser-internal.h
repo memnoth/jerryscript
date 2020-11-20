@@ -168,8 +168,8 @@ typedef struct
   uint16_t literal_index;                     /**< literal index argument */
   uint16_t value;                             /**< other argument (second literal or byte). */
   uint16_t third_literal_index;               /**< literal index argument */
-  uint8_t literal_type;                       /**< last literal type */
-  uint8_t literal_object_type;                /**< last literal object type */
+  lexer_literal_type_t literal_type :8;                       /**< last literal type */
+  lexer_literal_object_type_t literal_object_type :8;                /**< last literal object type */
 } cbc_argument_t;
 
 /* Useful parser macros. */
@@ -310,7 +310,7 @@ typedef struct
 typedef struct parser_saved_context_t
 {
   /* Parser members. */
-  uint32_t status_flags;                      /**< parsing options */
+  parser_general_flags_t status_flags :32;                      /**< parsing options */
   uint16_t stack_depth;                       /**< current stack depth */
   uint16_t stack_limit;                       /**< maximum stack depth */
   struct parser_saved_context_t *prev_context_p; /**< last saved context */
@@ -343,7 +343,7 @@ typedef struct
   uint32_t allocated_buffer_size;             /**< size of the dinamically allocated buffer */
 
   /* Parser members. */
-  uint32_t status_flags;                      /**< status flags */
+  parser_general_flags_t status_flags :32;                      /**< status flags */
   uint16_t stack_depth;                       /**< current stack depth */
   uint16_t stack_limit;                       /**< maximum stack depth */
   parser_saved_context_t *last_context_p;     /**< last saved context */
@@ -364,7 +364,7 @@ typedef struct
 
   /* Compact byte code members. */
   cbc_argument_t last_cbc;                    /**< argument of the last cbc */
-  uint16_t last_cbc_opcode;                   /**< opcode of the last cbc */
+  cbc_opcode_t last_cbc_opcode :16;                   /**< opcode of the last cbc */
 
   /* Literal types */
   uint16_t argument_count;                    /**< number of function arguments */
@@ -557,7 +557,19 @@ void parser_scan_until (parser_context_t *context_p, lexer_range_t *range_p, lex
  * @{
  */
 
-void parser_parse_statements (parser_context_t *context_p);
+void parser_parse_statements_real (parser_context_t *context_p);
+
+#define LBP "{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{"
+#define RBP "}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}"
+extern int mnth_depth;
+static inline void parser_parse_statements (parser_context_t *context_p) {
+  fprintf(stderr, "-- parser_parse_statements %.*s\n", mnth_depth, LBP);
+  mnth_depth += 2;
+  parser_parse_statements_real(context_p);
+  mnth_depth -= 2;
+  fprintf(stderr, "-- parser_parse_statements %.*s\n", mnth_depth, RBP);
+}
+
 void parser_free_jumps (parser_stack_iterator_t iterator);
 
 #if ENABLED (JERRY_ES2015_MODULE_SYSTEM)

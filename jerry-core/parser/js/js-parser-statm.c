@@ -2170,11 +2170,12 @@ parser_parse_label (parser_context_t *context_p) /**< context */
   parser_stack_iterator_init (context_p, &context_p->last_statement);
 } /* parser_parse_label */
 
+int mnth_depth = 2;
 /**
  * Parse statements.
  */
 void
-parser_parse_statements (parser_context_t *context_p) /**< context */
+parser_parse_statements_real (parser_context_t *context_p) /**< context */
 {
   /* Statement parsing cannot be nested. */
   JERRY_ASSERT (context_p->last_statement.current_p == NULL);

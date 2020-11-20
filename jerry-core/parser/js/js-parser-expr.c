@@ -48,7 +48,7 @@ static const uint8_t parser_binary_precedence_table[36] =
 /**
  * Generate byte code for operators with lvalue.
  */
-static inline void
+static void
 parser_push_result (parser_context_t *context_p) /**< context */
 {
   if (CBC_NO_RESULT_OPERATION (context_p->last_cbc_opcode))

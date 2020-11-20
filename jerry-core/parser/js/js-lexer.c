@@ -604,6 +604,12 @@ lexer_parse_identifier (parser_context_t *context_p, /**< context */
     context_p->token.lit_location.length = (prop_length_t) length;
   }
 
+  {
+    uint8_t strbuf[128] = { 0, };
+    memcpy(strbuf, ident_start_p, length);
+    fprintf(stderr, "ident : (%s)\n", strbuf);
+  }
+
   context_p->source_p = source_p;
   context_p->column = column;
 } /* lexer_parse_identifier */

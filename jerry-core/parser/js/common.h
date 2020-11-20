@@ -104,8 +104,8 @@ typedef struct
     uint16_t index;                      /**< real index during post processing */
   } prop;
 
-  uint8_t type;                          /**< type of the literal */
-  uint8_t status_flags;                  /**< status flags */
+  uint8_t type; // leesoo: dont' convert   /**< type of the literal */
+  lexer_literal_status_flags_t status_flags :8;                  /**< status flags */
 } lexer_literal_t;
 
 void util_free_literal (lexer_literal_t *literal_p);
