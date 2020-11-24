@@ -111,7 +111,7 @@ typedef enum
   LEXER_DIVIDE,                  /**< "/" (prec: 14) */
   LEXER_MODULO,                  /**< "%" (prec: 14) */
 
-  LEXER_LEFT_BRACE = 51,              /**< "{" */
+  LEXER_LEFT_BRACE,              /**< "{" */
   LEXER_LEFT_PAREN,              /**< "(" */
   LEXER_LEFT_SQUARE,             /**< "[" */
   LEXER_RIGHT_BRACE,             /**< "}" */
@@ -125,7 +125,7 @@ typedef enum
   LEXER_ARROW,                   /**< "=>" */
 #endif /* ENABLED (JERRY_ES2015_ARROW_FUNCTION) */
 
-  LEXER_KEYW_BREAK = 61,              /**< break */
+  LEXER_KEYW_BREAK,              /**< break */
   LEXER_KEYW_DO,                 /**< do */
   LEXER_KEYW_CASE,               /**< case  */
   LEXER_KEYW_ELSE,               /**< else */
@@ -147,7 +147,7 @@ typedef enum
   LEXER_KEYW_TRY,                /**< try */
 
   /* These are virtual tokens. */
-  LEXER_EXPRESSION_START = 81,        /**< expression start */
+  LEXER_EXPRESSION_START,        /**< expression start */
   LEXER_PROPERTY_GETTER,         /**< property getter function */
   LEXER_PROPERTY_SETTER,         /**< property setter function */
   LEXER_COMMA_SEP_LIST,          /**< comma separated bracketed expression list */
