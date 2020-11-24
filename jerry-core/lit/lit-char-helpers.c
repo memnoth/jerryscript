@@ -201,30 +201,6 @@ lit_char_is_unicode_non_letter_ident_part (ecma_char_t c) /**< code unit */
 } /* lit_char_is_unicode_non_letter_ident_part */
 
 /**
- * Checks whether the next UTF8 character is a valid identifier start.
- *
- * @return true if it is.
- */
-bool
-lit_char_is_identifier_start (const uint8_t *src_p) /**< pointer to a vaild UTF8 character */
-{
-  if (*src_p <= LIT_UTF8_1_BYTE_CODE_POINT_MAX)
-  {
-    return lit_char_is_identifier_start_character (*src_p);
-  }
-
-  /* ECMAScript 2015 specification allows some code points in supplementary plane.
-   * However, we don't permit characters in supplementary characters as start of identifier.
-   */
-  if ((*src_p & LIT_UTF8_4_BYTE_MASK) == LIT_UTF8_4_BYTE_MARKER)
-  {
-    return false;
-  }
-
-  return lit_char_is_identifier_start_character (lit_utf8_peek_next (src_p));
-} /* lit_char_is_identifier_start */
-
-/**
  * Checks whether the character is a valid identifier start.
  *
  * @return true if it is.
@@ -243,30 +219,6 @@ lit_char_is_identifier_start_character (uint16_t chr) /**< EcmaScript character 
 
   return lit_char_is_unicode_letter (chr);
 } /* lit_char_is_identifier_start_character */
-
-/**
- * Checks whether the next UTF8 character is a valid identifier part.
- *
- * @return true if it is.
- */
-bool
-lit_char_is_identifier_part (const uint8_t *src_p) /**< pointer to a vaild UTF8 character */
-{
-  if (*src_p <= LIT_UTF8_1_BYTE_CODE_POINT_MAX)
-  {
-    return lit_char_is_identifier_part_character (*src_p);
-  }
-
-  /* ECMAScript 2015 specification allows some code points in supplementary plane.
-   * However, we don't permit characters in supplementary characters as part of identifier.
-   */
-  if ((*src_p & LIT_UTF8_4_BYTE_MASK) == LIT_UTF8_4_BYTE_MARKER)
-  {
-    return false;
-  }
-
-  return lit_char_is_identifier_part_character (lit_utf8_peek_next (src_p));
-} /* lit_char_is_identifier_part */
 
 /**
  * Checks whether the character is a valid identifier part.

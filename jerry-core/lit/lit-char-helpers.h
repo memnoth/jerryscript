@@ -17,6 +17,7 @@
 #define LIT_CHAR_HELPERS_H
 
 #include "lit-globals.h"
+#include "lit-strings.h"
 
 #define LIT_CHAR_UNDEF ((ecma_char_t) 0xFFFF) /* undefined character */
 
@@ -75,10 +76,56 @@ bool lit_char_is_line_terminator (ecma_char_t c);
 #define LIT_CHAR_UNDERSCORE  ((ecma_char_t) '_')  /* low line (underscore) */
 /* LIT_CHAR_BACKSLASH defined above */
 
-bool lit_char_is_identifier_start (const uint8_t *src_p);
-bool lit_char_is_identifier_part (const uint8_t *src_p);
 bool lit_char_is_identifier_start_character (ecma_char_t chr);
 bool lit_char_is_identifier_part_character (ecma_char_t chr);
+
+/**
+ * Checks whether the next UTF8 character is a valid identifier start.
+ *
+ * @return true if it is.
+ */
+static inline bool
+lit_char_is_identifier_start (const uint8_t *src_p) /**< pointer to a vaild UTF8 character */
+{
+  if (*src_p <= LIT_UTF8_1_BYTE_CODE_POINT_MAX)
+  {
+    return lit_char_is_identifier_start_character (*src_p);
+  }
+
+  /* ECMAScript 2015 specification allows some code points in supplementary plane.
+   * However, we don't permit characters in supplementary characters as start of identifier.
+   */
+  if ((*src_p & LIT_UTF8_4_BYTE_MASK) == LIT_UTF8_4_BYTE_MARKER)
+  {
+    return false;
+  }
+
+  return lit_char_is_identifier_start_character (lit_utf8_peek_next (src_p));
+} /* lit_char_is_identifier_start */
+
+/**
+ * Checks whether the next UTF8 character is a valid identifier part.
+ *
+ * @return true if it is.
+ */
+static inline bool
+lit_char_is_identifier_part (const uint8_t *src_p) /**< pointer to a vaild UTF8 character */
+{
+  if (*src_p <= LIT_UTF8_1_BYTE_CODE_POINT_MAX)
+  {
+    return lit_char_is_identifier_part_character (*src_p);
+  }
+
+  /* ECMAScript 2015 specification allows some code points in supplementary plane.
+   * However, we don't permit characters in supplementary characters as part of identifier.
+   */
+  if ((*src_p & LIT_UTF8_4_BYTE_MASK) == LIT_UTF8_4_BYTE_MARKER)
+  {
+    return false;
+  }
+
+  return lit_char_is_identifier_part_character (lit_utf8_peek_next (src_p));
+} /* lit_char_is_identifier_part */
 
 /*
  * Punctuator characters (ECMA-262 v5, 7.7)
